@@ -10,8 +10,10 @@ import com.marklogicexercise.response.AdderResponse;
 import com.marklogicexercise.response.BaseResponse;
 import com.marklogicexercise.response.HelloResponse;
 import com.marklogicexercise.response.HelloResponseForJson;
+import com.marklogicexercise.response.StateResponse;
 import com.marklogicexercise.service.IAdderService;
 import com.marklogicexercise.service.IHelloService;
+import com.marklogicexercise.service.IStateService;
 
 @RestController
 @RequestMapping("/marklogic")
@@ -23,6 +25,8 @@ public class MarklogicExerciseController {
 	@Autowired
 	private IAdderService adderService = null;
 
+	@Autowired
+	private IStateService stateService = null;
 
 	@RequestMapping(value = "/hello", method = RequestMethod.GET, produces = { "application/json", "application/xml" })
 	@ResponseBody
@@ -42,6 +46,13 @@ public class MarklogicExerciseController {
 	public AdderResponse adderToOne(Integer inc) {
 		AdderResponse response = new AdderResponse();
 		response = adderService.addOne(inc);
+		return response;
+	}
+
+	@RequestMapping(value = "/stateful", method = RequestMethod.POST, produces = { "application/json" })
+	public StateResponse getTotalState(Long delta) {
+		StateResponse response = new StateResponse();
+		response = stateService.getTotal(delta);
 		return response;
 	}
 
