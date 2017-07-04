@@ -1,0 +1,36 @@
+package com.marklogicexercise.controller;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import com.marklogicexercise.response.BaseResponse;
+import com.marklogicexercise.response.HelloResponse;
+import com.marklogicexercise.response.HelloResponseForJson;
+import com.marklogicexercise.service.IHelloService;
+
+@RestController
+@RequestMapping("/marklogic")
+public class MarklogicExerciseController {
+
+	@Autowired
+	private IHelloService helloService = null;
+
+	@RequestMapping(value = "/hello", method = RequestMethod.GET, produces = { "application/json", "application/xml" })
+	@ResponseBody
+	public BaseResponse createHello(HttpServletRequest request) {
+		HelloResponseForJson responseJson = new HelloResponseForJson();
+		HelloResponse responseXml = new HelloResponse();
+		String accept = request.getHeader("accept");
+		if (accept.equals("application/xml")) {
+			responseXml = helloService.createHelloForXML();
+			return responseXml;
+		}
+		responseJson = helloService.createHelloForJson();
+		return responseJson;
+	}
+
+}
